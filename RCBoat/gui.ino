@@ -54,7 +54,7 @@ const char index_html[] PROGMEM = R"rawliteral(
       appearance: none;
       width: 20px;
       height: 20px;
-      background: #4CAF50;
+      background: #2b6be4; /* Updated color */
       border-radius: 50%;
       cursor: pointer;
       margin-top: -6px; /* Adjust to center the thumb */
@@ -69,7 +69,7 @@ const char index_html[] PROGMEM = R"rawliteral(
     .slider::-moz-range-thumb {
       width: 20px;
       height: 20px;
-      background: #4CAF50;
+      background: #2b6be4; /* Updated color */
       border-radius: 50%;
       cursor: pointer;
     }
@@ -83,7 +83,7 @@ const char index_html[] PROGMEM = R"rawliteral(
       color: transparent;
     }
     .slider::-ms-fill-lower {
-      background: #ddd;
+      background: #2b6be4; /* Updated color */
       border-radius: 5px;
     }
     .slider::-ms-fill-upper {
@@ -93,7 +93,7 @@ const char index_html[] PROGMEM = R"rawliteral(
     .slider::-ms-thumb {
       width: 20px;
       height: 20px;
-      background: #4CAF50;
+      background: #2b6be4; /* Updated color */
       border-radius: 50%;
       cursor: pointer;
     }
