@@ -13,6 +13,7 @@ AsyncWebServer server(80);
 // Pins where motors are connected
 const int motorPin1 = 18;
 const int motorPin2 = 19;
+bool connectionLost = false;
 
 // Function to handle slider1 value
 void handleSlider1(AsyncWebServerRequest *request) {
@@ -34,6 +35,12 @@ void handleSlider2(AsyncWebServerRequest *request) {
     analogWrite(motorPin2, motorValue2);
   }
   request->send(200, "text/plain", "OK");
+}
+
+// Function to handle signal strength requests
+void handleSignalStrength(AsyncWebServerRequest *request) {
+  int32_t rssi = WiFi.RSSI();
+  request->send(200, "text/plain", String(rssi));
 }
 
 void setup() {
@@ -62,10 +69,24 @@ void setup() {
   server.on("/motor1", HTTP_GET, handleSlider1);
   server.on("/motor2", HTTP_GET, handleSlider2);
 
+  // Handle signal strength requests
+  server.on("/signal-strength", HTTP_GET, handleSignalStrength);
+
   // Start server
   server.begin();
 }
 
 void loop() {
-  // Nothing to do here in the loop for this example
+  // Check Wi-Fi connection status
+  if (WiFi.status() != WL_CONNECTED) {
+    if (!connectionLost) {
+      Serial.println("WiFi connection lost! Stopping motors.");
+      // Shut down the motors
+      analogWrite(motorPin1, 0);
+      analogWrite(motorPin2, 0);
+      connectionLost = true;
+    }
+  } else {
+    connectionLost = false;
+  }
 }

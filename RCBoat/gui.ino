@@ -130,6 +130,12 @@ const char index_html[] PROGMEM = R"rawliteral(
       flex-direction: column;
       align-items: center;
     }
+    .signal-icon {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 24px;
+    }
   </style>
 </head>
 <body>
@@ -137,6 +143,7 @@ const char index_html[] PROGMEM = R"rawliteral(
     <i class="bi bi-brightness-high-fill" id="toggleDark"></i>
     <i class="bi bi-arrows-fullscreen" id="toggleFullscreen"></i>
   </div>
+  <i class="bi bi-wifi signal-icon" id="signalIcon"></i>
   <div class="container">
     <h2>Arduino RC Boat</h2>
     <div class="slider-container">
@@ -163,6 +170,7 @@ const char index_html[] PROGMEM = R"rawliteral(
       const toggleDark = document.getElementById('toggleDark');
       const toggleFullscreen = document.getElementById('toggleFullscreen');
       const body = document.querySelector('body');
+      const signalIcon = document.getElementById('signalIcon');
       
       toggleDark.addEventListener('click', function() {
         this.classList.toggle('bi-moon');
@@ -223,6 +231,25 @@ const char index_html[] PROGMEM = R"rawliteral(
       slider2.ontouchend = function() {
         resetSlider(slider2, output2, "motor2");
       }
+
+      function updateSignalStrength() {
+        fetch("/signal-strength")
+          .then(response => response.text())
+          .then(data => {
+            const strength = parseInt(data);
+            if (strength > -50) {
+              signalIcon.className = "bi bi-wifi signal-icon";
+            } else if (strength > -60) {
+              signalIcon.className = "bi bi-wifi-2 signal-icon";
+            } else if (strength > -70) {
+              signalIcon.className = "bi bi-wifi-1 signal-icon";
+            } else {
+              signalIcon.className = "bi bi-wifi-off signal-icon";
+            }
+          });
+      }
+
+      setInterval(updateSignalStrength, 1000); // Update signal strength every second
     });
 </script>
 </body>
